@@ -43,10 +43,11 @@ function love.load()
 	fb = graphics.newFramebuffer( 320, 240 )
 	fb:setFilter( "nearest", "nearest" )
 	
-	world.initialize( 40, 30 )
+	world.initialize( 128, 128 )
 	entity.initialize()
 	
 	camera.setSize( 40, 30 )
+	camera.setPosition( 20, 15 )
 	
 	world.generate()
 end
@@ -57,23 +58,45 @@ function love.keypressed( key )
 	end
 end
 
+function love.mousepressed( x, y, button )
+	x = math.floor( ( x / 2 ) / 8 + camera.x - camera.hwid )
+	y = math.floor( ( y / 2 ) / 8 + camera.y - camera.hhei )
+	local ents = world.getEntsInBounds( x, y, 1, 1 )
+	if button == "l" and #ents == 0 then
+		print( "Placing crate at " .. x .. ", " .. y )
+		local prop = entity.create( "crate" )
+		prop:setPosition( x + 0.5, y + 0.5 )
+		prop:spawn()
+	elseif button == "r" then
+		for _, ent in ipairs( ents ) do
+			if ent.classname == "crate" then
+				ent:remove()
+			end
+		end
+	end
+end
+
 function love.update( dt )	
 	if love.keyboard.isDown( " " ) then
 		dt = dt * 4
 	end
 	
+	local x, y = camera.getPosition()
+	
 	if love.keyboard.isDown( "w" ) then
-		camera.y = camera.y - dt * 16
+		y = y - dt * 16
 	end
 	if love.keyboard.isDown( "s" ) then
-		camera.y = camera.y + dt * 16
+		y = y + dt * 16
 	end
 	if love.keyboard.isDown( "a" ) then
-		camera.x = camera.x - dt * 16
+		x = x - dt * 16
 	end
 	if love.keyboard.isDown( "d" ) then
-		camera.x = camera.x + dt * 16
+		x = x + dt * 16
 	end
+	
+	camera.setPosition( x, y )
 	
 	for k, v in ipairs( world.entities ) do
 		v:update( dt )

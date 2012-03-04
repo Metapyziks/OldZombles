@@ -30,16 +30,27 @@ function world.initialize( width, height )
 end
 
 function world.generate()
-	for i = 1, 128 do
+	for i = 1, 1024 do
 		local x, y = math.random( world.width ), math.random( world.height )
 		local ent
-		if i <= 124 then
+		if i <= 1020 then
 			ent = entity.create( "human" )
 		else
 			ent = entity.create( "zombie" )
 		end
-		ent:setPosition( x, y )
+		ent:setPosition( x + 0.5, y + 0.5 )
 		ent:spawn()
+	end
+	for i = 1, 512 do
+		local x, y = math.random( world.width ), math.random( world.height )
+		local ents = world.getEntsInBounds( x, y, 1, 1 )
+		if #ents == 0 then
+			local prop = entity.create( "crate" )
+			prop:setPosition( x + 0.5, y + 0.5 )
+			prop:spawn()
+		else
+			i = i - 1
+		end
 	end
 end
 
@@ -76,7 +87,7 @@ function world.depthSortInBounds( x, y, width, height )
 			local k = ( i - 1 ) % world.gridwidth + 1
 			local l = ( j - 1 ) % world.gridheight + 1
 			table.sort( world.entgrid[ k ][ l ],
-				function( a, b ) return a.y < b.y end )
+				function( a, b ) return a.y + a.bbhei / 2 < b.y + b.bbhei / 2 end )
 		end
 	end
 end

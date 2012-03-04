@@ -95,6 +95,18 @@ function ENT:getPosition()
 	return self.x, self.y
 end
 
+function ENT:getScreenPos()
+	local x = ( self.x - camera.x + camera.hwid ) * 8
+	local y = ( self.y - camera.y + camera.hhei ) * 8
+	
+	if x < 0 then x = x + world.width * 8
+	elseif x >= camera.width * 8 then x = x - world.width * 8 end
+	if y < 0 then y = y + world.height * 8
+	elseif y >= camera.height * 8 then y = y - world.height * 8 end
+	
+	return math.floor( x + 0.5 ), math.floor( y + 0.5 )
+end
+
 function ENT:setBBSize( wid, hei )
 	self.bbwid = wid
 	self.bbhei = hei
@@ -149,10 +161,8 @@ function ENT:updateGridPosition()
 	self.gridx = math.floor( self.x / ENT_GRID_RES ) + 1
 	self.gridy = math.floor( self.y / ENT_GRID_RES ) + 1
 	
-	self.gridx = math.min( math.max( self.gridx, 1 ),
-				 math.ceil( world.width / ENT_GRID_RES ) )
-	self.gridy = math.min( math.max( self.gridy, 1 ),
-				 math.ceil( world.height / ENT_GRID_RES ) )
+	self.gridx = math.min( math.max( self.gridx, 1 ), world.gridwidth )
+	self.gridy = math.min( math.max( self.gridy, 1 ), world.gridheight )
 end
 
 function ENT:getEntGridPosition()
@@ -160,10 +170,10 @@ function ENT:getEntGridPosition()
 end
 
 function ENT:update( dt )
-	if self.x < 0 then self.x = self.x + world.width end
-	if self.y < 0 then self.y = self.y + world.height end
-	if self.x >= world.width then self.x = self.x - world.width end
-	if self.y >= world.height then self.y = self.y - world.height end
+	if self.x < 0 then self.x = self.x + world.width
+	elseif self.x >= world.width then self.x = self.x - world.width end
+	if self.y < 0 then self.y = self.y + world.height
+	elseif self.y >= world.height then self.y = self.y - world.height end
 	world.updateEntity( self )
 end
 

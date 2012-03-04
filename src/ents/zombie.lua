@@ -15,6 +15,8 @@ ENT.thinkinterval = 1
 
 function ENT:initialize()
 	self.walkspeed = math.random() * 0.5 + 1.25
+	
+	ENT.baseclass.initialize( self )
 end
 
 function ENT:update( dt )
@@ -51,7 +53,7 @@ function ENT:update( dt )
 					olddir = math.atan2( self.wandery, self.wanderx )
 				end
 				local wanderdir = olddir + ( math.random() - 0.5 ) * math.pi / 8
-				local speed = self.walkspeed * ( math.random() * 0.75 + 0.25 )
+				local speed = self.walkspeed * ( math.random() * 0.5 + 0.5 )
 				self.wanderx = math.cos( wanderdir ) * speed
 				self.wandery = math.sin( wanderdir ) * speed
 			end
@@ -59,7 +61,7 @@ function ENT:update( dt )
 		
 		if self.target ~= nil then
 			local xd, yd = self:getDiffEnt( self.target )
-			if math.abs( xd ) <= 1 and math.abs( yd ) <= 1 then
+			if math.abs( xd ) <= 0.75 and math.abs( yd ) <= 0.5 then
 				self.target:remove()
 				local zomb = entity.create( "zombie" )
 				zomb:setPosition( self.target:getPosition() )

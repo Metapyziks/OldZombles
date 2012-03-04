@@ -1,2 +1,2 @@
 @ECHO OFF
-love src
+love src --console

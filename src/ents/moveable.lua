@@ -47,7 +47,7 @@ function ENT:update( dt )
 						local ndy = mul * dy
 						if bst + ndy < beb and bsb + ndy > bet then
 							dx = ndx
-							dy = ndy
+							--dy = ndy
 						end
 					elseif dx < 0 and ber < bsl and ber > bsl + dx then
 						local ndx = bsl - ber
@@ -55,7 +55,7 @@ function ENT:update( dt )
 						local ndy = mul * dy
 						if bst + ndy < beb and bsb + ndy > bet then
 							dx = ndx
-							dy = ndy
+							--dy = ndy
 						end
 					end
 					if dy > 0 and bet > bsb and bet < bsb + dy then
@@ -63,7 +63,7 @@ function ENT:update( dt )
 						local mul = ndy / dy
 						local ndx = mul * dx
 						if bsl + ndx < ber and bsr + ndx > bel then
-							dx = ndx
+							--dx = ndx
 							dy = ndy
 						end
 					elseif dy < 0 and beb < bst and beb > bst + dy then
@@ -71,7 +71,7 @@ function ENT:update( dt )
 						local mul = ndy / dy
 						local ndx = mul * dx
 						if bsl + ndx < ber and bsr + ndx > bel then
-							dx = ndx
+							--dx = ndx
 							dy = ndy
 						end
 					end

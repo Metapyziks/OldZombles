@@ -42,16 +42,16 @@ ENT.animspeed = 1
 ENT.solid = true
 
 function ENT:initialize()
-	self:setBBSize( 0.5, 0.5 )
+	self:setBBSize( 0.5, 0.25 )
 	
 	ENT.baseclass.initialize( self )
 end
 
 function ENT:draw()
 	if self.animimage ~= nil then
-		local x, y = self:getPosition()
-		x = math.floor( ( x - camera.x ) * 8 ) - 2
-		y = math.floor( ( y - camera.y ) * 8 ) - 6
+		local x, y = self:getScreenPos()
+		x = x - 2
+		y = y - 6
 		local frame = math.floor( ( getTime() - self.spawntime )
 			* 4 * self.animspeed ) % 4 + 1
 		graphics.drawq( self.animimage, self.framequads[ self.movedir + 1 ][ frame ], x, y )
